@@ -33,28 +33,18 @@ cd ${DIR}
 echo "Subset BAM file twice..."
 module load samtools/intel/1.3
 # Change the random number generator seed to get different reads (integer part of '-s' argument)
-samtools view -h -b -s 0.05 ${BAM} > A_tmp_${BAM}
-samtools view -h -b -s 1.05 ${BAM} > B_tmp_${BAM}
-
-echo "Get subset file line counts..."
-# Get read counts in each file
-A_lines=$(wc -l A_tmp_${BAM} | awk '{print $1}'")
-B_lines=$(wc -l B_tmp_${BAM} | awk '{print $1}'")
-
-echo "Rename subset files to include read number..."
-# Rename files to include number of reads
-mv A_tmp_${BAM} A_${A_lines}_random_reads_${BAM}
-mv B_tmp_${BAM} B_${B_lines}_random_reads_${BAM}
+samtools view -h -b -s 0.${FRACT} ${BAM} > A_${EXPID}_${BAM}
+samtools view -h -b -s 1.${FRACT} ${BAM} > B_${EXPID}_${BAM}
 
 #---------------------------------#
 #        Compare coverages        #
 #---------------------------------#
 
 module load deeptools/intel/2.3.5
-multiBamSummary bins --bamfiles A_${A_lines}_random_reads_${BAM} B_${B_lines}_random_reads_${BAM} \
---labels ${EXPID}_A ${EXPID}_B \
--out ${A_lines}_random_reads_${BAM}_readCounts.npz \ # default output: a compressed numpy array: *.npz
---outRawCounts ${A_lines}_random_reads_${BAM}_readCounts.tsv # alternative output: tab-delimited file
+multiBamSummary bins --bamfiles A_${EXPID}_${BAM} B_${EXPID}_${BAM} \
+--labels A_${EXPID} B_${EXPID} \
+-out ${EXPID}_${BAM}_readCounts.npz \ # default output: a compressed numpy array: *.npz
+--outRawCounts ${EXPID}_${BAM}_readCounts.tsv # alternative output: tab-delimited file
 
 echo "
 Done!
