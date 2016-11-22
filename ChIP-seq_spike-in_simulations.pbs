@@ -35,7 +35,7 @@ echo "SAM file subset B..."
 macs2 randsample --seed 2 -f "SAM" -t $SAMFILE -n $NREADS -o B_${EXPID}_${SAMFILE}.bed --verbose 3
 
 echo "Merge bedgraph files for direct comparison..."
-bedtools unionbedg -i A_${EXPID}_${SAMFILE}.bed B_${EXPID}_${SAMFILE}.bed -header > ${EXPID}_${SAMFILE}.bg
+bedtools unionbedg -i A_${EXPID}_${SAMFILE}.bed B_${EXPID}_${SAMFILE}.bed -filler NA -header > ${EXPID}_${SAMFILE}.bg
 
 echo "
 Done!
