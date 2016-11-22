@@ -18,7 +18,7 @@
 # Run this script as:
 # $ qsub -v EXPID="task_description",DIR="path/to/dir",SAMFILE="file.sam",NREADS="number_of_reads" path/to/Fq2ReadCounts_S288C.pbs
 # Example:
-# $ qsub -v EXPID="Sub_1M",DIR="/scratch/lv38/Spike_in_sim/",SAMFILE="AH119B-053013-SacCer3-2mis-PM.bam",NREADS="1e+6" ~/Pipeline/ChIP-seq_spike-in_simulations.pbs
+# $ qsub -v EXPID="Sub_1M",DIR="/scratch/lv38/Spike-in_sim/",SAMFILE="AAH119B-053013-SacCer3-2mis-PM.sam",NREADS="1e+6" ~/Pipeline/ChIP-seq_spike-in_simulations.pbs
 
 # If you need another variable, you can change 'MYVAR' in the header
 #------------------------------------------------------------------------------#
@@ -29,13 +29,13 @@ module load bedtools/intel/2.25.0
 echo "JobID is $PBS_JOBID"
 cd $DIR
 
-echo "Subset SAM file twice..."
+echo "SAM file subset A..."
 macs2 randsample --seed 1 -f "SAM" -t $SAMFILE -n $NREADS -o A_${EXPID}_${SAMFILE}.bed --verbose 3
+echo "SAM file subset B..."
 macs2 randsample --seed 2 -f "SAM" -t $SAMFILE -n $NREADS -o B_${EXPID}_${SAMFILE}.bed --verbose 3
 
-echo "Merge bedgraph files fro direct comparison..."
+echo "Merge bedgraph files for direct comparison..."
 bedtools unionbedg -i A_${EXPID}_${SAMFILE}.bed B_${EXPID}_${SAMFILE}.bed -header > ${EXPID}_${SAMFILE}.bg
-
 
 echo "
 Done!
