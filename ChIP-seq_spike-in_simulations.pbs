@@ -41,10 +41,7 @@ samtools view -h -b -s 1.${FRACT} ${BAM} > B_${EXPID}_${BAM}
 #---------------------------------#
 
 module load deeptools/intel/2.3.5
-multiBamSummary bins --bamfiles A_${EXPID}_${BAM} B_${EXPID}_${BAM} \
---labels A_${EXPID} B_${EXPID} \
--out ${EXPID}_${BAM}_readCounts.npz \ # default output: a compressed numpy array: *.npz
---outRawCounts ${EXPID}_${BAM}_readCounts.tsv # alternative output: tab-delimited file
+multiBamSummary bins --bamfiles A_${EXPID}_${BAM} B_${EXPID}_${BAM} --labels A_${EXPID} B_${EXPID} -out ${EXPID}_${BAM}_readCounts.npz --outRawCounts ${EXPID}_${BAM}_readCounts.tsv
 
 echo "
 Done!
